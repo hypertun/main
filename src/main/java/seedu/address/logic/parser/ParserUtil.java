@@ -240,6 +240,18 @@ public class ParserUtil {
     }
 
     /**
+     * Parses {@code Collection<String> weights} into a {@code Set<Weight>}.
+     */
+    public static Set<Weight> parseWeights(Collection<String> weights) throws IllegalValueException {
+        requireNonNull(weights);
+        final Set<Weight> weightSet = new HashSet<>();
+        for (String weightName : weights) {
+            weightSet.add(parseWeight(weightName));
+        }
+        return weightSet;
+    }
+
+    /**
      * Parses a {@code String tag} into a {@code Tag}.
      * Leading and trailing whitespaces will be trimmed.
      *

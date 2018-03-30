@@ -58,9 +58,10 @@ public class AddCommandParser implements Parser<AddCommand> {
             Weight weight = ParserUtil.parseWeight(argMultimap.getValue(PREFIX_WEIGHT)).get();
             Gender gender = ParserUtil.parseGender(argMultimap.getValue(PREFIX_GENDER)).get();
             Age age = ParserUtil.parseAge(argMultimap.getValue(PREFIX_AGE)).get();
+            Set<Weight> weightList = ParserUtil.parseWeights(argMultimap.getAllValues(PREFIX_WEIGHT));
             Set<Tag> tagList = ParserUtil.parseTags(argMultimap.getAllValues(PREFIX_TAG));
 
-            Person person = new Person(name, phone, email, address, height, weight, gender, age, tagList);
+            Person person = new Person(name, phone, email, address, height, weight, gender, age, weightList, tagList);
 
             return new AddCommand(person);
         } catch (IllegalValueException ive) {

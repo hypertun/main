@@ -24,14 +24,15 @@ public class Person {
     private final Gender gender;
     private final Age age;
 
+    private final UniqueWeightList weights;
     private final UniqueTagList tags;
 
     /**
      * Every field must be present and not null.
      */
     public Person(Name name, Phone phone, Email email, Address address, Height height,
-                  Weight weight, Gender gender, Age age, Set<Tag> tags) {
-        requireAllNonNull(name, phone, email, address, height, weight, age, tags);
+                  Weight weight, Gender gender, Age age, Set<Weight>weights, Set<Tag> tags) {
+        requireAllNonNull(name, phone, email, address, height, weight, age, weights, tags);
         this.name = name;
         this.phone = phone;
         this.email = email;
@@ -40,6 +41,7 @@ public class Person {
         this.weight = weight;
         this.gender = gender;
         this.age = age;
+        this.weights = new UniqueWeightList(weights);
         // protect internal tags from changes in the arg list
         this.tags = new UniqueTagList(tags);
     }
@@ -75,6 +77,15 @@ public class Person {
     public Age getAge() {
         return age;
     }
+
+    /**
+     * Returns an immutable weight set, which throws {@code UnsupportedOperationException}
+     * if modification is attempted.
+     */
+    public Set<Weight> getWeights() {
+        return Collections.unmodifiableSet(weights.toSet());
+    }
+
     /**
      * Returns an immutable tag set, which throws {@code UnsupportedOperationException}
      * if modification is attempted.
@@ -107,7 +118,7 @@ public class Person {
     @Override
     public int hashCode() {
         // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(name, phone, email, address, height, weight, gender, age, tags);
+        return Objects.hash(name, phone, email, address, height, weight, gender, age, weights, tags);
     }
 
     @Override
@@ -128,7 +139,9 @@ public class Person {
                 .append(getGender())
                 .append(" Age: ")
                 .append(getAge())
-                .append(" Tags: ");
+                .append(" Weights: ");
+        getWeights().forEach(builder::append);
+        builder.append(" Tags: ");
         getTags().forEach(builder::append);
         return builder.toString();
     }

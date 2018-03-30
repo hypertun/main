@@ -45,6 +45,8 @@ public class XmlAdaptedPerson {
     private String age;
 
     @XmlElement
+    private List<XmlAdaptedWeight> weighted = new ArrayList<>();
+    @XmlElement
     private List<XmlAdaptedTag> tagged = new ArrayList<>();
 
     /**
@@ -57,7 +59,8 @@ public class XmlAdaptedPerson {
      * Constructs an {@code XmlAdaptedPerson} with the given person details.
      */
     public XmlAdaptedPerson(String name, String phone, String email, String address,
-                            String height, String weight, String gender, String age, List<XmlAdaptedTag> tagged) {
+                            String height, String weight, String gender, String age, List<XmlAdaptedWeight> weighted,
+                            List<XmlAdaptedTag> tagged) {
         this.name = name;
         this.phone = phone;
         this.email = email;
@@ -66,6 +69,9 @@ public class XmlAdaptedPerson {
         this.weight = weight;
         this.gender = gender;
         this.age = age;
+        if (weighted != null) {
+            this.weighted = new ArrayList<>(weighted);
+        }
         if (tagged != null) {
             this.tagged = new ArrayList<>(tagged);
         }
@@ -85,6 +91,10 @@ public class XmlAdaptedPerson {
         weight = source.getWeight().value;
         gender = source.getGender().value;
         age = source.getAge().value;
+        weighted = new ArrayList<>();
+        for (Weight weight : source.getWeights()) {
+            weighted.add(new XmlAdaptedWeight(weight));
+        }
         tagged = new ArrayList<>();
         for (Tag tag : source.getTags()) {
             tagged.add(new XmlAdaptedTag(tag));
@@ -100,6 +110,11 @@ public class XmlAdaptedPerson {
         final List<Tag> personTags = new ArrayList<>();
         for (XmlAdaptedTag tag : tagged) {
             personTags.add(tag.toModelType());
+        }
+
+        final List<Weight> personWeights = new ArrayList<>();
+        for (XmlAdaptedWeight weight : weighted) {
+            personWeights.add(weight.toModelType());
         }
 
         if (this.name == null) {
@@ -166,10 +181,11 @@ public class XmlAdaptedPerson {
         }
         final Age age = new Age(this.age);
 
-
+        final Set<Weight> weights = new HashSet<>(personWeights);
 
         final Set<Tag> tags = new HashSet<>(personTags);
-        return new Person(name, phone, email, address, height, weight, gender, age, tags);
+
+        return new Person(name, phone, email, address, height, weight, gender, age, weights, tags);
     }
 
     @Override
@@ -191,6 +207,7 @@ public class XmlAdaptedPerson {
                 && Objects.equals(weight, otherPerson.weight)
                 && Objects.equals(gender, otherPerson.gender)
                 && Objects.equals(age, otherPerson.age)
+                && weighted.equals(otherPerson.weighted)
                 && tagged.equals(otherPerson.tagged);
     }
 }

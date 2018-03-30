@@ -22,6 +22,7 @@ import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.logic.commands.EditCommand;
 import seedu.address.logic.commands.EditCommand.EditPersonDescriptor;
 import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.model.person.Weight;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -58,6 +59,7 @@ public class EditCommandParser implements Parser<EditCommand> {
             ParserUtil.parseWeight(argMultimap.getValue(PREFIX_WEIGHT)).ifPresent(editPersonDescriptor::setWeight);
             ParserUtil.parseGender(argMultimap.getValue(PREFIX_GENDER)).ifPresent(editPersonDescriptor::setGender);
             ParserUtil.parseAge(argMultimap.getValue(PREFIX_AGE)).ifPresent(editPersonDescriptor::setAge);
+            parseWeightsForEdit(argMultimap.getAllValues(PREFIX_WEIGHT)).ifPresent(editPersonDescriptor::setWeights);
             parseTagsForEdit(argMultimap.getAllValues(PREFIX_TAG)).ifPresent(editPersonDescriptor::setTags);
         } catch (IllegalValueException ive) {
             throw new ParseException(ive.getMessage(), ive);
@@ -68,6 +70,21 @@ public class EditCommandParser implements Parser<EditCommand> {
         }
 
         return new EditCommand(index, editPersonDescriptor);
+    }
+
+    /**
+     * Parses {@code Collection<String> weights} into a {@code Set<Weight>} if {@code weights} is non-empty.
+     * If {@code weights} contain only one element which is an empty string, it will be parsed into a
+     * {@code Set<Weight>} containing zero weights.
+     */
+    private Optional<Set<Weight>> parseWeightsForEdit(Collection<String> weights) throws IllegalValueException {
+        assert weights != null;
+
+        if (weights.isEmpty()) {
+            return Optional.empty();
+        }
+        Collection<String> weightSet = weights.size() == 1 && weights.contains("") ? Collections.emptySet() : weights;
+        return Optional.of(ParserUtil.parseWeights(weightSet));
     }
 
     /**

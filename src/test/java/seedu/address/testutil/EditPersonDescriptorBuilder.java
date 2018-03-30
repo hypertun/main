@@ -44,6 +44,7 @@ public class EditPersonDescriptorBuilder {
         descriptor.setWeight(person.getWeight());
         descriptor.setGender(person.getGender());
         descriptor.setAge(person.getAge());
+        descriptor.setWeights(person.getWeights());
         descriptor.setTags(person.getTags());
     }
 
@@ -108,6 +109,16 @@ public class EditPersonDescriptorBuilder {
      */
     public EditPersonDescriptorBuilder withAge(String age) {
         descriptor.setAge(new Age(age));
+        return this;
+    }
+
+    /**
+     * Parses the {@code weights} into a {@code Set<Weight>} and set it to the {@code EditPersonDescriptor}
+     * that we are building.
+     */
+    public EditPersonDescriptorBuilder withWeights(String... weights) {
+        Set<Weight> weightSet = Stream.of(weights).map(Weight::new).collect(Collectors.toSet());
+        descriptor.setWeights(weightSet);
         return this;
     }
 

@@ -28,6 +28,7 @@ public class PersonBuilder {
     public static final String DEFAULT_WEIGHT = "55.5";
     public static final String DEFAULT_GENDER = "f";
     public static final String DEFAULT_AGE = "22";
+    public static final String DEFAULT_WEIGHTS = "55.5";
     public static final String DEFAULT_TAGS = "friends";
 
     private Name name;
@@ -38,6 +39,7 @@ public class PersonBuilder {
     private Weight weight;
     private Gender gender;
     private Age age;
+    private Set<Weight> weights;
     private Set<Tag> tags;
 
     public PersonBuilder() {
@@ -49,6 +51,7 @@ public class PersonBuilder {
         weight = new Weight(DEFAULT_WEIGHT);
         gender = new Gender(DEFAULT_GENDER);
         age = new Age(DEFAULT_AGE);
+        weights = SampleDataUtil.getWeightSet(DEFAULT_WEIGHTS);
         tags = SampleDataUtil.getTagSet(DEFAULT_TAGS);
     }
 
@@ -64,6 +67,7 @@ public class PersonBuilder {
         weight = personToCopy.getWeight();
         gender = personToCopy.getGender();
         age = personToCopy.getAge();
+        weights = new HashSet<>(personToCopy.getWeights());
         tags = new HashSet<>(personToCopy.getTags());
     }
 
@@ -80,6 +84,14 @@ public class PersonBuilder {
      */
     public PersonBuilder withTags(String ... tags) {
         this.tags = SampleDataUtil.getTagSet(tags);
+        return this;
+    }
+
+    /**
+     * Parses the {@code tags} into a {@code Set<Tag>} and set it to the {@code Person} that we are building.
+     */
+    public PersonBuilder withWeights(String ... weights) {
+        this.weights = SampleDataUtil.getWeightSet(weights);
         return this;
     }
 
@@ -140,7 +152,7 @@ public class PersonBuilder {
     }
 
     public Person build() {
-        return new Person(name, phone, email, address, height, weight, gender, age, tags);
+        return new Person(name, phone, email, address, height, weight, gender, age, weights, tags);
     }
 
 }

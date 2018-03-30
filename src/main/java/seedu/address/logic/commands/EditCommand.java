@@ -127,10 +127,11 @@ public class EditCommand extends UndoableCommand {
         Weight updatedWeight = editPersonDescriptor.getWeight().orElse(personToEdit.getWeight());
         Gender updatedGender = editPersonDescriptor.getGender().orElse(personToEdit.getGender());
         Age updatedAge = editPersonDescriptor.getAge().orElse(personToEdit.getAge());
+        Set<Weight> updatedWeights = editPersonDescriptor.getWeights().orElse(personToEdit.getWeights());
         Set<Tag> updatedTags = editPersonDescriptor.getTags().orElse(personToEdit.getTags());
 
         return new Person(updatedName, updatedPhone, updatedEmail, updatedAddress, updatedHeight, updatedWeight,
-                updatedGender, updatedAge, updatedTags);
+                updatedGender, updatedAge, updatedWeights, updatedTags);
     }
 
     @Override
@@ -165,6 +166,7 @@ public class EditCommand extends UndoableCommand {
         private Weight weight;
         private Gender gender;
         private Age age;
+        private Set<Weight> weights;
         private Set<Tag> tags;
 
         public EditPersonDescriptor() {}
@@ -182,6 +184,7 @@ public class EditCommand extends UndoableCommand {
             setWeight(toCopy.weight);
             setGender(toCopy.gender);
             setAge(toCopy.age);
+            setWeights(toCopy.weights);
             setTags(toCopy.tags);
         }
 
@@ -258,6 +261,24 @@ public class EditCommand extends UndoableCommand {
         }
 
         /**
+         * Sets {@code weights} to this object's {@code weights}.
+         * A defensive copy of {@code weights} is used internally.
+         */
+        public void setWeights(Set<Weight> weights) {
+            this.weights = (weights != null) ? new HashSet<>(weights) : null;
+        }
+
+        /**
+         * Returns an unmodifiable weight set, which throws {@code UnsupportedOperationException}
+         * if modification is attempted.
+         * Returns {@code Optional#empty()} if {@code weights} is null.
+         */
+        public Optional<Set<Weight>> getWeights() {
+            return (weights != null) ? Optional.of(Collections.unmodifiableSet(weights)) : Optional.empty();
+        }
+
+
+        /**
          * Sets {@code tags} to this object's {@code tags}.
          * A defensive copy of {@code tags} is used internally.
          */
@@ -297,6 +318,7 @@ public class EditCommand extends UndoableCommand {
                     && getWeight().equals(e.getWeight())
                     && getGender().equals(e.getGender())
                     && getAge().equals(e.getAge())
+                    && getWeights().equals(e.getWeights())
                     && getTags().equals(e.getTags());
         }
     }

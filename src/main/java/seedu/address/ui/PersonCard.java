@@ -45,6 +45,8 @@ public class PersonCard extends UiPart<Region> {
     @FXML
     private Label age;
     @FXML
+    private FlowPane weights;
+    @FXML
     private FlowPane tags;
 
     public PersonCard(Person person, int displayedIndex) {
@@ -59,6 +61,7 @@ public class PersonCard extends UiPart<Region> {
         weight.setText(person.getWeight().value);
         gender.setText(person.getGender().value);
         age.setText(person.getAge().value);
+        person.getWeights().forEach(weight -> weights.getChildren().add(new Label(weight.value)));
         person.getTags().forEach(tag -> tags.getChildren().add(new Label(tag.tagName)));
     }
 

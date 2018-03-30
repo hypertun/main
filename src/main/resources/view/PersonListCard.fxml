@@ -72,6 +72,12 @@
                <Font name="System Bold" size="12.0" />
             </font></Label>
       <Label fx:id="weight" styleClass="cell_small_label" text="\$weight" />
+         <Label text="Past Weights(kg):">
+            <font>
+               <Font name="System Bold" size="12.0" />
+            </font>
+         </Label>
+         <FlowPane fx:id="weights" />
          <Label text="Age:">
             <font>
                <Font name="System Bold" size="12.0" />
