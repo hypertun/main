@@ -152,6 +152,7 @@ public class XmlAdaptedPersonTest {
         Assert.assertThrows(IllegalValueException.class, expectedMessage, person::toModelType);
     }
 
+    //@@author hypertun
     @Test
     public void toModelType_invalidGender_throwsIllegalValueException() {
         XmlAdaptedPerson person =
@@ -185,6 +186,7 @@ public class XmlAdaptedPersonTest {
         String expectedMessage = String.format(MISSING_FIELD_MESSAGE_FORMAT, Age.class.getSimpleName());
         Assert.assertThrows(IllegalValueException.class, expectedMessage, person::toModelType);
     }
+    //@@author
 
     @Test
     public void toModelType_invalidTags_throwsIllegalValueException() {

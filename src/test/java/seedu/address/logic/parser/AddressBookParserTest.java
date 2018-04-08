@@ -175,12 +175,14 @@ public class AddressBookParserTest {
         assertEquals(new SelectCommand(INDEX_FIRST_PERSON), command);
     }
 
+    //@@author hypertun
     @Test
     public void parseCommand_calories() throws Exception {
         CaloriesCommand command = (CaloriesCommand) parser.parseCommand(
                 CaloriesCommand.COMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased());
         assertEquals(new CaloriesCommand(INDEX_FIRST_PERSON), command);
     }
+    //@@author
 
     @Test
     public void parseCommand_redoCommandWord_returnsRedoCommand() throws Exception {
